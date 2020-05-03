@@ -8,9 +8,10 @@ import (
 )
 
 type RabbitMQConfig struct {
-	URL   string
-	Topic string
-	Key   string
+	URL      string
+	Exchange string
+	Key      string
+	Queue    string // use by consumer
 }
 
 type msgQueue struct {

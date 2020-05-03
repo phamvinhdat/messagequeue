@@ -18,7 +18,7 @@ func (q *msgQueue) Send(ctx context.Context, msg messagequeue.Message) error {
 	}
 	header := convertToAMQPHeader(msg.Header)
 	contentType := msg.Header.Get(publishoption.ContentType)
-	logrus.Debugf("send message to queue, topic: %s, key: %s", q.conf.Topic, q.conf.Key)
+	logrus.Debugf("send message to queue, topic: %s, key: %s", q.conf.Exchange, q.conf.Key)
 	err = q.sendMessage(msg.Data, header, contentType, msg.TimeStamp)
 
 	if err != nil {
@@ -30,7 +30,7 @@ func (q *msgQueue) Send(ctx context.Context, msg messagequeue.Message) error {
 
 func (q *msgQueue) sendMessage(data []byte, header amqp.Table, contentType string, timeStamp time.Time) error {
 	err := q.channel.Publish(
-		q.conf.Topic,
+		q.conf.Exchange,
 		q.conf.Key,
 		false,
 		false,
@@ -52,13 +52,13 @@ func (q *msgQueue) sendMessage(data []byte, header amqp.Table, contentType strin
 
 func (s *msgQueue) exchangeDeclare(kind string) error {
 	err := s.channel.ExchangeDeclare(
-		s.conf.Topic, // exchange name
-		kind,         // exchange type
-		true,         //durable
-		false,        // auto delete
-		false,        // internal
-		false,        // noWait
-		nil,          //args
+		s.conf.Exchange, // exchange name
+		kind,            // exchange type
+		true,            //durable
+		false,           // auto delete
+		false,           // internal
+		false,           // noWait
+		nil,             //args
 	)
 	if err != nil {
 		return err
