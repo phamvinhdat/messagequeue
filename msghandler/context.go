@@ -34,7 +34,7 @@ func (c *QueueContext) Next() {
 
 	lenHookFn := len(c.hookFns)
 	c.index++
-	if lenHookFn >= c.index {
+	if lenHookFn <= c.index {
 		return
 	}
 
