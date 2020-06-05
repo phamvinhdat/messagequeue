@@ -10,7 +10,6 @@ import (
 )
 
 var (
-	invalidContentType     = errors.New("invalid content-type")
 	unsupportedContentType = errors.New("unsupported content type")
 	publisherIsClosed      = errors.New("publisher is closed")
 )
@@ -25,6 +24,8 @@ type publisher struct {
 	isClosed bool
 }
 
+// Publish public a message, if content-type not assign,
+// json-content-type will assign
 func (p *publisher) Publish(ctx context.Context, data interface{},
 	opts ...publishoption.PublishOption) error {
 	if p.isClosed {
@@ -60,7 +61,7 @@ func buildMsg(data interface{}, opts ...publishoption.PublishOption) (msg Messag
 
 	contentType, ok := opt.Header.Contains(publishoption.ContentType)
 	if !ok {
-		err = invalidContentType
+		contentType = JsonContentType
 		return
 	}
 

@@ -35,6 +35,7 @@ func WithHeaderAdding(key, value string) PublishOption {
 func WithContentType(value string) PublishOption {
 	return WithHeader(ContentType, value)
 }
+
 func GetPublishOption(opts ...PublishOption) publishOpt {
 	opt := publishOpt{Header: frame.Header{}}
 	for _, optFn := range opts {
