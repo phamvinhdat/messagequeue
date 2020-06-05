@@ -6,7 +6,6 @@ import (
 
 	"github.com/go-stomp/stomp/frame"
 	"github.com/phamvinhdat/messagequeue"
-	"github.com/phamvinhdat/messagequeue/publishoption"
 	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
 )
@@ -17,7 +16,7 @@ func (q *msgQueue) Send(ctx context.Context, msg messagequeue.Message) error {
 		return err
 	}
 	header := convertToAMQPHeader(msg.Header)
-	contentType := msg.Header.Get(publishoption.ContentType)
+	contentType := msg.Header.Get(messagequeue.ContentType)
 	logrus.Debugf("send message to queue, topic: %s, key: %s", q.conf.Exchange, q.conf.Key)
 	err = q.sendMessage(msg.Data, header, contentType, msg.TimeStamp)
 

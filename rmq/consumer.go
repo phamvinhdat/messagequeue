@@ -5,7 +5,6 @@ import (
 
 	"github.com/go-stomp/stomp/frame"
 	"github.com/phamvinhdat/messagequeue"
-	"github.com/phamvinhdat/messagequeue/publishoption"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cast"
 	"github.com/streadway/amqp"
@@ -115,7 +114,7 @@ func convertToFrameHeader(table amqp.Table) frame.Header {
 
 func convertAMQPMsgToMessage(amqpMsg amqp.Delivery) messagequeue.Message {
 	header := convertToFrameHeader(amqpMsg.Headers)
-	header.Set(publishoption.ContentType, amqpMsg.ContentType)
+	header.Set(messagequeue.ContentType, amqpMsg.ContentType)
 
 	return messagequeue.Message{
 		Header:    header,

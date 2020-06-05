@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	"github.com/phamvinhdat/messagequeue/publishoption"
 )
 
 var (
@@ -15,7 +13,7 @@ var (
 )
 
 type Publisher interface {
-	Publish(ctx context.Context, data interface{}, opts ...publishoption.PublishOption) error
+	Publish(ctx context.Context, data interface{}, opts ...PublishOption) error
 	Close() error
 }
 
@@ -27,7 +25,7 @@ type publisher struct {
 // Publish public a message, if content-type not assign,
 // json-content-type will assign
 func (p *publisher) Publish(ctx context.Context, data interface{},
-	opts ...publishoption.PublishOption) error {
+	opts ...PublishOption) error {
 	if p.isClosed {
 		return publisherIsClosed
 	}
@@ -56,13 +54,13 @@ func NewPublisher(sender Sender) Publisher {
 	}
 }
 
-func buildMsg(data interface{}, opts ...publishoption.PublishOption) (msg Message, err error) {
-	opt := publishoption.GetPublishOption(opts...)
+func buildMsg(data interface{}, opts ...PublishOption) (msg Message, err error) {
+	opt := GetPublishOption(opts...)
 
-	contentType, ok := opt.Header.Contains(publishoption.ContentType)
+	contentType, ok := opt.Header.Contains(ContentType)
 	if !ok {
 		contentType = JsonContentType
-		return
+		opt.Header.Set(ContentType, JsonContentType)
 	}
 
 	// convert data

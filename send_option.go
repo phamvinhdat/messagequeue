@@ -1,4 +1,4 @@
-package publishoption
+package messagequeue
 
 import "github.com/go-stomp/stomp/frame"
 
